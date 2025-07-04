@@ -207,12 +207,12 @@ export const useAuthStore = defineStore('auth', {
         this.clearUser()
         
         // Navigate to login page
-        await navigateTo('/auth/login')
+        await navigateTo('/admin/login')
       } catch (error) {
         console.error('Logout error:', error)
         // Clear state anyway
         this.clearUser()
-        await navigateTo('/auth/login')
+        await navigateTo('/admin/login')
       }
     },
 
