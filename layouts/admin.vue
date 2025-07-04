@@ -18,9 +18,5 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  middleware: 'admin'
-})
-
 const sidebarOpen = ref(false)
 </script>
