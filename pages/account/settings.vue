@@ -10,7 +10,7 @@
               <UserIcon class="w-6 h-6 text-rose-600" />
             </div>
             <div class="ml-3">
-              <p class="font-medium text-gray-900">{{ authStore.currentUser?.fullName }}</p>
+              <p class="font-medium text-gray-900">{{ authStore.currentUser?.name }}</p>
               <p class="text-sm text-gray-600">{{ authStore.currentUser?.email }}</p>
             </div>
           </div>
@@ -265,10 +265,10 @@
               >
                 <div class="flex items-start justify-between">
                   <div>
-                    <h3 class="font-medium text-gray-900">{{ address.fullName }}</h3>
+                    <h3 class="font-medium text-gray-900">{{ address.name }}</h3>
                     <p class="text-sm text-gray-600 mt-1">
                       {{ address.address }}<br>
-                      {{ address.city }} {{ address.postalCode }}<br>
+                      {{ address.city }} {{ address.postCode }}<br>
                       {{ address.country }}
                     </p>
                     <p v-if="address.phone" class="text-sm text-gray-600 mt-1">
@@ -347,7 +347,7 @@
                   Nom complet
                 </label>
                 <input
-                  v-model="addressForm.fullName"
+                  v-model="addressForm.name"
                   type="text"
                   required
                   class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-rose-500 focus:border-rose-500"
@@ -384,27 +384,12 @@
                     Code postal
                   </label>
                   <input
-                    v-model="addressForm.postalCode"
+                    v-model="addressForm.postCode"
                     type="text"
                     required
                     class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-rose-500 focus:border-rose-500"
                   />
                 </div>
-              </div>
-              
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">
-                  Pays
-                </label>
-                <select
-                  v-model="addressForm.country"
-                  required
-                  class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-rose-500 focus:border-rose-500"
-                >
-                  <option value="MA">Maroc</option>
-                  <option value="FR">France</option>
-                  <option value="ES">Espagne</option>
-                </select>
               </div>
               
               <div>
@@ -546,10 +531,10 @@ const editingAddress = ref(null)
 const addressLoading = ref(false)
 
 const addressForm = reactive({
-  fullName: '',
+  name: '',
   address: '',
   city: '',
-  postalCode: '',
+  postCode: '',
   country: 'MA',
   phone: '',
   isDefault: false
@@ -570,7 +555,7 @@ const updateProfile = async () => {
   
   try {
     await authStore.updateProfile({
-      fullName: profileForm.fullName,
+      name: profileForm.name,
       name: profileForm.name,
       email: profileForm.email
     })
@@ -627,7 +612,7 @@ const fetchShippingAddresses = async () => {
     const pb = usePocketBase()
     const result = await pb.collection('shippingAddresses').getFullList({
       filter: `user = "${authStore.currentUser?.id}"`,
-      sort: '-isDefault,fullName'
+      sort: '-isDefault,name'
     })
     shippingAddresses.value = result
   } catch (error) {
@@ -700,10 +685,10 @@ const closeAddressForm = () => {
   showAddressForm.value = false
   editingAddress.value = null
   Object.assign(addressForm, {
-    fullName: '',
+    name: '',
     address: '',
     city: '',
-    postalCode: '',
+    postCode: '',
     country: 'MA',
     phone: '',
     isDefault: false
