@@ -2,15 +2,16 @@
 export default defineNuxtPlugin(async () => {
   const authStore = useAuthStore()
   
-  // Initialize auth state from PocketBase on app start
-  await authStore.initAuth()
+  // Initialize auth state from PocketBase
+  authStore.initializeAuth()
   
-  // Set up periodic auth refresh (every 15 minutes)
-  if (process.client) {
-    setInterval(() => {
-      if (authStore.isAuthenticated) {
-        authStore.refreshAuth()
-      }
-    }, 15 * 60 * 1000) // 15 minutes
-  }
+  // Set up auth store listener for PocketBase changes
+  const pb = usePocketBase()
+  pb.authStore.onChange((token, record) => {
+    if (record) {
+      authStore.setUser(record as any)
+    } else {
+      authStore.clearUser()
+    }
+  })
 })
