@@ -38,13 +38,11 @@
         </div>
 
         <div>
-          <label for="longDescription" class="block text-sm font-medium text-gray-700">Long Description</label>
-          <textarea
-            id="longDescription"
+          <label class="block text-sm font-medium text-gray-700 mb-2">Long Description</label>
+          <Editor
             v-model="form.longDescription"
-            rows="5"
-            required
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            :init="editorConfig"
+            class="mt-1"
           />
         </div>
       </div>
@@ -191,6 +189,7 @@
 
 <script setup lang="ts">
 import type { Product, Category, Tag } from '~/types'
+import Editor from '@tinymce/tinymce-vue'
 
 interface Props {
   product?: Product | null
@@ -220,6 +219,37 @@ const form = reactive({
   isFeatured: props.product?.isFeatured || false,
   isHero: props.product?.isHero || false
 })
+
+// Get runtime config for TinyMCE API key
+const { $config } = useNuxtApp()
+
+// TinyMCE configuration
+const editorConfig = {
+  api_key: $config.public.tinymceApiKey,
+  height: 300,
+  menubar: false,
+  plugins: [
+    'lists', 'link', 'image', 'paste', 'help', 'wordcount',
+    'table', 'code', 'searchreplace', 'autolink', 'media'
+  ],
+  toolbar: 'undo redo | formatselect | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | link image media table | code | help',
+  content_style: 'body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif; font-size: 14px }',
+  paste_as_text: false,
+  paste_data_images: true,
+  image_advtab: true,
+  link_default_target: '_blank',
+  link_title: false,
+  resize: false,
+  branding: false,
+  elementpath: false,
+  statusbar: false,
+  formats: {
+    alignleft: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', classes: 'text-left' },
+    aligncenter: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', classes: 'text-center' },
+    alignright: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', classes: 'text-right' },
+    alignjustify: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', classes: 'text-justify' }
+  }
+}
 
 // Auto-generate slug from name
 watch(() => form.name, (newName) => {

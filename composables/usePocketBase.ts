@@ -1,19 +1,26 @@
+// composables/usePocketBase.ts
 import PocketBase from 'pocketbase'
+import type { TypedPocketBase } from '~/types/pocketbase'
 
-let pb: PocketBase
+let pb: TypedPocketBase
 
-export const usePocketBase = () => {
+export const usePocketBase = (): TypedPocketBase => {
   if (!pb) {
     const config = useRuntimeConfig()
-    pb = new PocketBase(config.public.pocketbaseUrl)
+    pb = new PocketBase(config.public.pocketbaseUrl) as TypedPocketBase
     
-    // Add request interceptor for rate limiting
-    pb.beforeSend = function (url, options) {
-      // Add delay between requests to avoid rate limiting
-      return new Promise(resolve => {
-        setTimeout(() => resolve({ url, options }), 100)
-      })
-    }
+    // Configure auth store to persist in localStorage
+    pb.authStore.onChange((token, record) => {
+      // This automatically syncs auth state changes across tabs
+      if (process.client) {
+        const authStore = useAuthStore()
+        if (record) {
+          authStore.setUser(record)
+        } else {
+          authStore.clearUser()
+        }
+      }
+    })
   }
   
   return pb

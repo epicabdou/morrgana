@@ -14,7 +14,8 @@ export default defineNuxtConfig({
     public: {
       pocketbaseUrl: process.env.POCKETBASE_URL || 'http://127.0.0.1:8090',
       siteUrl: process.env.SITE_URL || 'http://localhost:3000',
-      googleClientId: process.env.GOOGLE_CLIENT_ID || ''
+      googleClientId: process.env.GOOGLE_CLIENT_ID || '',
+      tinymceApiKey: process.env.TINYMCE_API_KEY || 'cej84b497evzdt54m9tgdpm8cnozk1hbzlm63q2teujzd41o'
     }
   },
     app: {
