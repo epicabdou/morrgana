@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>Page for /</h1>
-    <p>Dummy content for /.</p>
+    <h1>Page for /categories/[slug]</h1>
+    <p>Dummy content for /categories/[slug].</p>
   </div>
 </template>
 

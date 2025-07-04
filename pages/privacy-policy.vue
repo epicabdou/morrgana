@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>Page for /</h1>
-    <p>Dummy content for /.</p>
+    <h1>Page for /privacy-policy</h1>
+    <p>Dummy content for /privacy-policy.</p>
   </div>
 </template>
 
